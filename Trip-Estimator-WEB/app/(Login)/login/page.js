@@ -146,10 +146,10 @@ export default function Login() {
                 <div className="flex group justify-center -mb-5">
                     <IoIosCompass className="text-[45px]  text-blue-800" />
                     <div className="hidden group-hover:underline   underline-offset-1   decoration-black md:flex ml-2 text-[30px] font-bold text-blue-800">
-                      <span className="text-gray-900">Trip</span>Estimator
+                      <span className="text-gray-900">Seek</span>Snap
                     </div>
                     <div className="ml-2 md:hidden text-[30px] font-bold text-blue-800">
-                      <span className="text-gray-900">T</span>E
+                      <span className="text-gray-900">S</span>S
                     </div>
                   </div>
                   <h1 className="text-xl bg-blue-600 text-white -mt-5 w-fit px-4 p-1 rounded-lg font-medium md:text-[20px] flex justify-center mx-auto">
