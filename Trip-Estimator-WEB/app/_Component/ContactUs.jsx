@@ -119,23 +119,23 @@ function Contact() {
             <li className="list-item">
               <FontAwesomeIcon icon={faMapMarker} size="xl" className="text-white mr-6 mt-10" />
               <span className="contact-icon text-white font-bold mr-2 place">
-                <a href="https://www.bing.com/ck/a?!&&p=4489dd8505a9bd56JmltdHM9MTcxMjQ0ODAwMCZpZ3VpZD0wNGU3YmQ0OS02MWI1LTYwNjMtM2ZiMi1hOTZmNjAyZTYxNTImaW5zaWQ9NTUxNA&ptn=3&ver=2&hsh=3&fclid=04e7bd49-61b5-6063-3fb2-a96f602e6152&u=a1L21hcHM_Jm1lcGk9MzV-RGlyZWN0aW9uc35Ub3BPZlBhZ2V-RGlyZWN0aW9uX0J1dHRvbiZ0eT0wJnJ0cD1wb3MuMTIuOTgxNjAwNzYxNDEzNTc0Xzc3LjcxNjI5MzMzNDk2MDk0X19TQVAlMjBMYWJzJTIwSW5kaWElMjAtJTIwR2F0ZSUyMDVfX2VffiZtb2RlPWQmdj0yJnNWPTE&ntb=1" target="_blank">SAP Labs, Bangalore</a>
+                <a href="https://www.google.co.in/maps/place/Koundampalayam,+Coimbatore,+Tamil+Nadu/@11.0453163,76.9317303,15z/data=!3m1!4b1!4m6!3m5!1s0x3ba85897648df841:0x80b7ba5192d1b3c1!8m2!3d11.046293!4d76.9471079!16zL20vMGY0eHdx?entry=ttu" target="_blank">Know Our Location</a>
               </span>
             </li>
             <li className="list-item">
               <FontAwesomeIcon icon={faPhone} size="xl" className="text-white mr-6 mt-10" />
-              <span className="contact-text phone mr"><a className="text-white font-bold">+91 8000490029</a></span>
+              <span className="contact-text phone mr"><a className="text-white font-bold">+91 9810174610</a></span>
             </li>
             <li className="list-item">
               <FontAwesomeIcon icon={faEnvelope} size="xl" className="text-white mr-6 mt-10" />
-              <span className="contact-text gmail"><a href="mailto:#" title="Send me an email" className="text-white font-bold">saplabshelpline@gmail.com</a></span>
+              <span className="contact-text gmail"><a href="mailto:#" title="Send me an email" className="text-white font-bold">touristshelpline@gmail.com</a></span>
             </li>
           </ul>
           <hr className="border-white mt-8" />
           <ul className="social-media-list flex justify-center items-center mt-4">
-            <li><a href="https://github.com/Sajithrajan03/Trip-Estimator-WEB" target="_blank" className="contact-icon text-white mr-4 text-xl"><FontAwesomeIcon icon={faGithub} /></a></li>
-            <li><a href="https://twitter.com/saplabsindia" target="_blank" className="contact-icon text-white mr-4 text-xl"><FontAwesomeIcon icon={faTwitter} /></a></li>
-            <li><a href="https://www.instagram.com/sap/" target="_blank" className="contact-icon text-white mr-4 text-xl"><FontAwesomeIcon icon={faInstagram} /></a></li>
+            <li><a href="https://github.com/Sajithrajan03/Seek-Snap-V1.git" target="_blank" className="contact-icon text-white mr-4 text-xl"><FontAwesomeIcon icon={faGithub} /></a></li>
+            <li><a href="https://twitter.com/TNTravelNews" target="_blank" className="contact-icon text-white mr-4 text-xl"><FontAwesomeIcon icon={faTwitter} /></a></li>
+            <li><a href="https://www.instagram.com/tntourismoffcl/" target="_blank" className="contact-icon text-white mr-4 text-xl"><FontAwesomeIcon icon={faInstagram} /></a></li>
           </ul>
           <hr className="border-white mt-3" />
           <div className="copyright text-center text-blue-600 font-bold mt-1">&copy; ALL OF THE RIGHTS RESERVED</div>
