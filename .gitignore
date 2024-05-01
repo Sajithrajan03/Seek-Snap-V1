@@ -1,0 +1,5 @@
+**/node_modules/
+**/.next/
+**/build/
+**/private_key.pem
+**/public_key.pem
