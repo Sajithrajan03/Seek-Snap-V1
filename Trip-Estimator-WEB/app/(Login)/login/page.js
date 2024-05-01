@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { LOGIN_URL } from "@/app/_Component/_util/constants";
@@ -16,6 +15,7 @@ import { Toast } from "primereact/toast";
 import ToastAlert from "@/app/_Component/_util/ToastAlerts";
 import LoadingScreen from "@/app/_Component/LoadingScreen";
 import { IoIosCompass } from "react-icons/io";
+import { motion } from "framer-motion";
 
 export default function Login() {
   const [emailFocused, setEmailFocused] = useState(false);
@@ -52,7 +52,10 @@ export default function Login() {
 
   const router = useRouter();
 
+  const [loginClicked, setLoginClicked] = useState(false);
+
   const HandleLogin = async (e) => {
+    setLoginClicked(true);
     e.preventDefault();
     try {
       setLoading(true);
@@ -127,13 +130,21 @@ export default function Login() {
   };
 
   return (
-    <div
-      className={` transition-opacity duration-500 ease-in-out ${
+    <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1 }}
+      className={` transition-opacity duration-5000 ease-in-out ${
         loaded ? "opacity-100" : "opacity-0"
       }`}
     >
       <main className="flex min-h-screen flex-col bg-[rgb(6,55,129)] ">
-        <div className="bg-gradient-to-r  from-cyan-300 to-blue-900 md:w-[20%] sm:w-[80%] p-8 rounded-[0%] h-[55%] left-[40%] top-[230px] absolute blur-3xl levitate"></div>
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="bg-gradient-to-r  from-cyan-300 to-blue-900 md:w-[20%] sm:w-[80%] p-8 rounded-[0%] h-[55%] left-[40%] top-[230px] absolute blur-3xl levitate"
+        ></motion.div>
         <div className="block">
           <div className="p-2">
             <Toast ref={toastRef} position="bottom-center" className="p-5" />
@@ -141,14 +152,18 @@ export default function Login() {
           {loading ? <LoadingScreen /> : null}
           <div className="relative min-h-screen">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-screen lg:py-0">
-              <div className="w-full  rounded-[24px] bg-clip-padding bg-opacity-80  md:mt-0 sm:max-w-md xl:p-0 bg-white ">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="w-full  rounded-[24px] bg-clip-padding bg-opacity-80  md:mt-0 sm:max-w-md xl:p-0 bg-white "
+              >
                 <div className="p-6 space-y-8 sm:p-8">
-                <div className="flex group justify-center -mb-5">
+                  <div className="flex group justify-center -mb-5">
                     <IoIosCompass className="text-[45px]  text-blue-800" />
                     <div className="hidden group-hover:underline   underline-offset-1   decoration-black md:flex ml-2 text-[30px] font-bold text-blue-800">
-                    <span className="text-gray-900">Seek</span> <span className="text-black">&amp;</span> Snap
-
-
+                      <span className="text-gray-900">Seek</span>{" "}
+                      <span className="text-black">&amp;</span> Snap
                     </div>
                     <div className="ml-2 md:hidden text-[30px] font-bold text-blue-800">
                       <span className="text-gray-900">S</span>S
@@ -166,87 +181,99 @@ export default function Login() {
                         Email
                       </label>
                       <div>
-                  <TextField
-                    id="outlined-error-helper-text"
-                    placeholder="Enter Email"
-                    value={userEmail}
-                    sx={{
-                      width: "100%",
-                      borderRadius: 5,
-                      transition: "transform 0.3s ease",
-                      transform: emailFocused ? "scale(1.02)" : "scale(1)",
-                      marginBottom: "16px", // Add margin bottom for spacing
-                    }}
-                    onFocus={() => {
-                      handleEmailFocus();
-                      setPasswordFocused(false); // Ensure password field doesn't scale up when email field is focused
-                    }}
-                    onBlur={() => setEmailFocused(false)}
-                    onChange={(e) => {
-                      const newValue = e.target.value.replace(/\s/g, '');
-                      setUserEmail(newValue);
-                    }}
-                    required
-                  />
-                </div>
+                        <TextField
+                          id="outlined-error-helper-text"
+                          placeholder="Enter Email"
+                          value={userEmail}
+                          sx={{
+                            width: "100%",
+                            borderRadius: 5,
+                            transition: "transform 0.3s ease",
+                            transform: emailFocused ? "scale(1.02)" : "scale(1)",
+                            marginBottom: "16px", // Add margin bottom for spacing
+                          }}
+                          onFocus={() => {
+                            handleEmailFocus();
+                            setPasswordFocused(false); // Ensure password field doesn't scale up when email field is focused
+                          }}
+                          onBlur={() => setEmailFocused(false)}
+                          onChange={(e) => {
+                            const newValue = e.target.value.replace(/\s/g, "");
+                            setUserEmail(newValue);
+                          }}
+                          required
+                        />
+                      </div>
 
-                <div>
-                  <TextField
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter Password"
-                    value={userPassword}
-                    sx={{
-                      width: "100%",
-                      borderRadius: 5,
-                      borderWidth: 5,
-                      transition: "transform 0.3s ease",
-                      transform: passwordFocused ? "scale(1.02)" : "scale(1)",
-                      marginTop: "16px", // Add margin top for spacing
-                    }}
-                    onFocus={() => {
-                      handlePasswordFocus();
-                      setEmailFocused(false); // Ensure email field doesn't scale up when password field is focused
-                    }}
-                    onBlur={() => setPasswordFocused(false)}
-                    onChange={(e) => {
-                      setUserPassword(e.target.value);
-                    }}
-                    required
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowPassword(!showPassword)} // Toggle showPassword on click
-                            edge="end"
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </div>
-
+                      <div>
+                        <TextField
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Enter Password"
+                          value={userPassword}
+                          sx={{
+                            width: "100%",
+                            borderRadius: 5,
+                            borderWidth: 5,
+                            transition: "transform 0.3s ease",
+                            transform: passwordFocused
+                              ? "scale(1.02)"
+                              : "scale(1)",
+                            marginTop: "16px", // Add margin top for spacing
+                          }}
+                          onFocus={() => {
+                            handlePasswordFocus();
+                            setEmailFocused(false); // Ensure email field doesn't scale up when password field is focused
+                          }}
+                          onBlur={() => setPasswordFocused(false)}
+                          onChange={(e) => {
+                            setUserPassword(e.target.value);
+                          }}
+                          required
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={() =>
+                                    setShowPassword(!showPassword)
+                                  } // Toggle showPassword on click
+                                  edge="end"
+                                >
+                                  {showPassword ? (
+                                    <VisibilityOff />
+                                  ) : (
+                                    <Visibility />
+                                  )}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </div>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-start"></div>
                       <p
                         id="Others"
-                         
                         className="text-sm font-medium text-primary-500 text-black hover:underline"
                       >
                         Forgot password?
                       </p>
                     </div>
-                    <button
+                    <motion.button
                       type="submit"
                       onClick={HandleLogin}
-                      className="w-full text-black bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 font-medium rounded-lg text-[16px] px-5 py-2 text-center disabled:bg-gray-400 disabled:cursor-not-allowed"
-                      style={{ transition: "background 0.3s ease" }}
-                      disabled={loading || userEmail === "" || userPassword === ""}
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.5, delay: 1 }}
+                      className={`w-full text-black bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 font-medium rounded-lg text-[16px] px-5 py-2 text-center disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors duration-300 ${
+                        loginClicked ? "animate-fadeOut" : ""
+                      }`}
+                      disabled={
+                        loading || userEmail === "" || userPassword === ""
+                      }
                     >
                       LOGIN
-                    </button>
+                    </motion.button>
                     <p
                       className="text-sm font-light text-[#f32525] flex flex-col justify-center"
                       id="Others"
@@ -263,11 +290,11 @@ export default function Login() {
                     </p>
                   </form>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
       </main>
-    </div>
+    </motion.div>
   );
 }

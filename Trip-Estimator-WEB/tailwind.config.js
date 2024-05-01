@@ -7,6 +7,7 @@ module.exports = withMT({
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/primereact/**/*.{js,ts,jsx,tsx}",
   ],
+  
   theme: {
     extend: {
       backgroundImage: {

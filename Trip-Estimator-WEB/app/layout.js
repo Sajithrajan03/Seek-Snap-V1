@@ -4,7 +4,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Trip Estimator",
+  title: "Seek & Snap",
   description: "Streamlining Trip Planning Processes.",
 };
 

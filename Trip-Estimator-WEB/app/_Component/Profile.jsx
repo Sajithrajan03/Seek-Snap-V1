@@ -1,391 +1,137 @@
-import React, { useState, useEffect } from "react";
-import {
-  FaUserCircle,
-  FaEnvelope,
-  FaMale,
-  FaFemale,
-  FaBriefcase,
-  FaIdCard,
-  FaSave,
-  FaTimes,
-  FaUserTie,
-  FaUserCog,
-} from "react-icons/fa"; // Import FaUserTie icon
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { PROFILE_URL } from "@/app/_Component/_util/constants";
-import secureLocalStorage from "react-secure-storage";
-const ProfileSettings = () => {
-  const initialFormData = {
-    firstName: "",
-    email: "",
-    phoneNumber: "",
-    addressLine1: "",
-    addressLine2: "",
-    state: "",
-    city: "",
-    gender: "",
-    jobRole: "",
-    designation: "",
+import React, { useState } from 'react';
+import { FaUserCircle } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './UserProfile.css'; // Import custom CSS for styling
+
+const UserProfile = () => {
+  const initialUserData = {
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    phoneNumber: '1234567890',
+    address: '123 Main St, Cityville',
+    gender: 'Male',
+    occupation: 'Software Engineer',
+    employeeId: 'hyd123456' // Initial Employee ID
   };
 
-  const [formData, setFormData] = useState(() => {
-    if (typeof window !== "undefined") {
-      const savedData = localStorage.getItem("profileFormData");
-      return savedData ? JSON.parse(savedData) : initialFormData;
-    } else {
-      return initialFormData;
-    }
-  });
-
+  const [userData, setUserData] = useState(initialUserData);
   const [editMode, setEditMode] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const [isDirty, setIsDirty] = useState(false); // Track if any changes are made
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let formattedValue = value;
-
-    if (name === "phoneNumber") {
-      formattedValue = value.replace(/\D/g, "").slice(0, 10);
-    }
-
-    setFormData({
-      ...formData,
-      [name]: formattedValue,
+    setUserData({
+      ...userData,
+      [name]: value,
     });
+    setIsDirty(true); // Set isDirty to true when changes are made
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSaving(true);
-
-    // Validation for required fields
-    const requiredFields = [
-      "firstName",
-      "jobRole",
-      "phoneNumber",
-      "state",
-      "city",
-      "designation",
-    ];
-    for (const field of requiredFields) {
-      if (!formData[field].trim()) {
-        toast.error(`${field === "firstName" ? "Name" : field} is required`);
-        setIsSaving(false);
+    if (isDirty) { // Only save changes if any changes are made
+      // Validate Employee ID
+      const regex = /^(hyd|cbe|bmb|chn|dlh)\d{6}$/; // Regex pattern for validation
+      if (!regex.test(userData.employeeId)) {
+        toast.error('Invalid Employee ID. Please enter a valid ID.');
         return;
       }
+      toast.success('Changes saved successfully!');
+    } else {
+      toast.info('No changes to save.');
     }
-
-    if (!/^\d{10}$/.test(profileData.emp_email)) {
-      toast.error(
-        "Invalid mobile number. It should contain exactly 10 digits."
-      );
-      setIsSaving(false);
-      return;
-    }
-
-    if (typeof window !== "undefined") {
-      localStorage.setItem("profileFormData", JSON.stringify(formData));
-      await new Promise((resolve) => setTimeout(resolve, 3000)); // Simulate saving delay
-      setIsSaving(false);
-      setEditMode(false);
-      toast.success("Profile Saved!");
-    }
+    setIsDirty(false); // Reset isDirty after saving changes
   };
-
-  const handleCancel = () => {
-    setFormData(initialFormData);
-    setEditMode(false);
-  };
-
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     localStorage.setItem('profileFormData', JSON.stringify(formData));
-  //     localStorage.setItem('editMode', editMode);
-  //   }
-  // }, [formData, editMode]);
-  const [profileData, setProfileData] = useState(null);
-  const [userEmail, setUserEmail] = useState(null);
-  useEffect(() => {
-    setUserEmail(secureLocalStorage.getItem("userEmail"));
-  }, []);
-  useEffect(() => {
-    if (userEmail != null) {
-      const fetchProfile = async () => {
-        try {
-          const response = await fetch(PROFILE_URL, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              emp_email: userEmail,
-            }),
-          });
-
-          if (response.status == 401) {
-            ToastAlert("error", "Error", "You are Unauthorized", toastRef);
-            setTimeout(() => {
-              router.replace("/");
-            }, 3000);
-          }
-
-          if (!response.ok) {
-            throw new Error("Failed to fetch trips");
-          }
-
-          const data = await response.json();
-
-          setProfileData(data.Message[0] || []);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
-      fetchProfile();
-    }
-  }, [userEmail]);
 
   return (
-    <div className="flex justify-center items-center h-full mt-2">
-      <div
-        className="container rounded-xl bg-white bg-opacity-70 p-5 mt-5"
-        style={{ width: "82%", height: "400px" }}
-      >
-        <ToastContainer />
-        {profileData && (
-          <div className="flex justify-center">
-            <div className="w-full md:w-1/3 border-r  border-black">
-              <div className="flex flex-col items-center text-center p-2 py-2">
-                <FaUserCircle className="rounded-full mt-5 text-6xl text-blue-700 mb-3" />
-                <div className="flex flex-col">
-                  <span className="font-bold mb-2">{profileData.emp_name}</span>
-                  {profileData.emp_email && (
-                    <div className="text-gray-600 flex items-center mb-2">
-                      <FaEnvelope className="mr-1 text-blue-700 size-6" />
-                      <span className="text-black">
-  <strong>{profileData.emp_email}</strong>
-</span>
+    <div className="container py-5">
+      <ToastContainer />
+      <div className="row justify-content-center">
+        <div className="col-lg-8">
+          <div className="card shadow-sm p-4 user-profile-card">
+            <div className="text-center">
+              <FaUserCircle className="display-4 mb-4 text-primary" />
+              <h2 className="fw-bold mb-3">{userData.name}</h2>
+              <p className="lead mb-0">{userData.email}</p>
+            </div> 
 
-                    </div>
-                  )}
-                  <div className="text-black flex items-center ">
-                    {profileData.emp_gender === "M" && (
-                      <FaMale className="mr-1 text-blue-700 size-6" />
-                    )}
-                    {profileData.emp_gender === "F" && (
-                      <FaFemale className="mr-1 text-blue-700 size-6" />
-                    )}
-                    {profileData.emp_gender === "Prefer not to say" ? (
-                      <span style={{ fontWeight: "bold" }}>
-                        <strong>Gender:&nbsp;&nbsp;</strong>
-                      </span>
-                    ) : null}
-                    <strong>{profileData.emp_gender}</strong>
-                  </div>
-
-                  {profileData.emp_status && (
-                  <div className="text-black flex items-center mt-2">
-                    <FaUserCog className="mr-1 text-blue-700 size-6" />
-                    {profileData.emp_status === "1" ? (
-                      <strong>Applicant</strong>
-                    ) : profileData.emp_status === "2" ? (
-                      <strong>Approver</strong>
-                    ) : null}
-                  </div>
-)}
-
-                   
-                </div>
+            <hr className="my-4" />
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label htmlFor="name" className="form-label">Name</label>
+                <input type="text" className="form-control" id="name" name="name" value={userData.name} onChange={handleChange} disabled={!editMode} required />
               </div>
-            </div>
-            <div
-              className="w-full md:w-auto border-r border-black"
-              style={{ width: "50%" }}
-            >
-              <div className="p-3 py-6">
-                <h4 className="text-left mb-4 font-bold text-2xl">
-                  PROFILE DETAILS
-                </h4>
-                <form onSubmit={handleSubmit}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-8">
-                  <div>
-                  <label className="text-sm mb-2">Full Name</label>
-                  <input
-                    type="text"
-                    className={`form-input font-bold ${editMode ? 'bg-white bg-opacity-50' : ''}`}
-                    name="firstName"
-                    value={profileData.emp_name}
-                    onChange={handleChange}
-                    placeholder="Full Name"
-                    required
-                    readOnly={!editMode}
-                    style={{ borderColor: 'rgba(0, 0, 0, 0.2)', background: editMode ? 'rgba(255, 255, 255, 0.8)' : 'transparent' }}
-                  />
-                </div>
-
-                <div>
-                <label className="text-sm block mb-2">Email ID</label>
-                <input
-                  type="email"
-                  className={`form-input font-bold ${editMode ? 'bg-white bg-opacity-80' : ''}`}
-                  name="email"
-                  value={profileData.emp_email}
-                  onChange={handleChange}
-                  placeholder="Enter Email ID"
-                  required
-                  readOnly={!editMode}
-                  style={{ borderColor: 'rgba(0, 0, 0, 0.2)', background: editMode ? 'rgba(255, 255, 255, 0.8)' : 'transparent' }}
-                />
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">Email</label>
+                <input type="email" className="form-control" id="email" name="email" value={userData.email} onChange={handleChange} disabled={!editMode} required />
               </div>
-
-              <div>
-              <label className="text-sm block mb-2">Mobile Number</label>
-              <input
-                type="tel"
-                className={`form-input font-bold ${editMode ? 'bg-white bg-opacity-80' : ''}`}
-                name="phoneNumber"
-                value={profileData.mobile}
-                onChange={handleChange}
-                placeholder="Enter Mobile Number"
-                required
-                readOnly={!editMode}
-                style={{ borderColor: 'rgba(0, 0, 0, 0.2)', background: editMode ? 'rgba(255, 255, 255, 0.8)' : 'transparent' }}
-              />
-            </div>
-
-
-                    <div className="flex flex-col">
-                      <div>
-                        <label className="text-sm block mt-2 mb-2">
-                          Gender
-                        </label>
-                        <input
-                          className="form-input font-bold"
-                          name="gender"
-                          value={profileData.emp_gender}
-                          onChange={handleChange}
-                          required
-                          disabled={!editMode}
-                          style={{ borderColor: 'rgba(0, 0, 0, 0.2)', background: editMode ? 'rgba(255, 255, 255, 0.8)' : 'transparent' }}
-                        >
-                          
-                        </input>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="text-sm block mt-2 mb-2">State</label>
-                      <input
-                        type="text"
-                        className="form-input font-bold"
-                        name="state"
-                        value={profileData.state}
-                        onChange={handleChange}
-                        placeholder="Enter State"
-                        required
-                        readOnly={!editMode}
-                        style={{ borderColor: 'rgba(0, 0, 0, 0.2)', background: editMode ? 'rgba(255, 255, 255, 0.8)' : 'transparent' }}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm block mt-2 mb-2">City</label>
-                      <input
-                        type="text"
-                        className="form-input font-bold"
-                        name="city"
-                        value={profileData.city}
-                        onChange={handleChange}
-                        placeholder="Enter City"
-                        required
-                        readOnly={!editMode}
-                        style={{ borderColor: 'rgba(0, 0, 0, 0.2)', background: editMode ? 'rgba(255, 255, 255, 0.8)' : 'transparent' }}
-                      />
-                    </div>
-                  </div>
-                  {/*<div className="mt-5 text-center mt-2">
-                    {!editMode && (
-                      <button
-                        type="button"
-                        className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-800 focus:outline-none mr-2"
-                        onClick={() => setEditMode(true)}
-                      >
-                        Edit
-                      </button>
-                    )}
-                    {editMode && (
-                      <>
-                        <button
-                          type="submit"
-                          className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-800 focus:outline-none mr-2"
-                          disabled={isSaving}
-                        >
-                          {isSaving ? "Please wait..." : "Save Profile"}{" "}
-                          <FaSave
-                            className="inline-block mr-1 mb-1 bg-coolor-black"
-                            size={16}
-                          />
-                        </button>
-                        <button
-                          type="button"
-                          className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 focus:outline-none"
-                          onClick={handleCancel}
-                        >
-                          Cancel{" "}
-                          <FaTimes className="inline-block mr-1" size={17} />
-                        </button>
-                      </>
-                    )}
-                  </div>*/}
-                </form>
+              <div className="mb-3">
+                <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
+                <input type="tel" className="form-control" id="phoneNumber" name="phoneNumber" value={userData.phoneNumber} onChange={handleChange} disabled={!editMode} required />
               </div>
-            </div>
-            <div className="w-full md:w-5/12 border-r border-black">
-              <div className="p-3 py-5">
-                <h5 className="text-left mb-8 font-bold text-2xl">
-                  JOB DETAILS
-                </h5>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-                  <div>
-                    <div className="mb-6">
-                      <label className="text-sm block mb-2">Employee ID</label>
-                      <input
-                        type="text"
-                        className="form-input font-bold"
-                        name="jobRole"
-                        value={profileData.emp_status}
-                        onChange={handleChange}
-                        placeholder="Enter Job Role"
-                        required
-                        readOnly={!editMode}
-                        style={{ borderColor: 'rgba(0, 0, 0, 0.2)', background: editMode ? 'rgba(255, 255, 255, 0.8)' : 'transparent' }}
-                      />
-                    </div>
-                    <div>
-  <label className="text-sm block mt- mb-2">
-    Designation
-  </label>
-  <div className="flex items-center">
-    {profileData.emp_status && (
-      <div className="text-gray-600 flex items-center mt-2">
-        {profileData.emp_status === "1" ? (
-          <strong className="text-black">Applicant</strong>
-        ) : profileData.emp_status === "2" ? (
-          <strong className="text-black">Approver</strong>
-        ) : null}
-      </div>
-    )}
-  </div>
-</div>
-
-                  </div>
-                </div>
+              <div className="mb-3">
+                <label htmlFor="address" className="form-label">Address</label>
+                <input type="text" className="form-control" id="address" name="address" value={userData.address} onChange={handleChange} disabled={!editMode} />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="gender" className="form-label">Gender</label>
+                <select className="form-select" id="gender" name="gender" value={userData.gender} onChange={handleChange} disabled={!editMode} required>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="occupation" className="form-label">Occupation</label>
+                <input type="text" className="form-control" id="occupation" name="occupation" value={userData.occupation} onChange={handleChange} disabled={!editMode} required />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="employeeId" className="form-label">Employee ID</label>
+                <input type="text" className="form-control" id="employeeId" name="employeeId" value={userData.employeeId} onChange={handleChange} disabled={!editMode} required />
+              </div>
+              <div className="text-center">
+                {editMode ? (
+                  <>
+                    <button type="button" className="btn btn-secondary me-3" onClick={() => { setEditMode(false); setIsDirty(false); }}>Cancel</button>
+                    <button type="submit" className="btn btn-primary">Save Changes</button>
+                  </>
+                ) : (
+                  <button type="button" className="btn btn-primary" onClick={() => setEditMode(true)}>Edit Profile</button>
+                )}
+              </div>
+            </form>
+          </div>
+          <div className="card shadow-sm mt-4 p-4 trip-history-card">
+            <h2 className="mb-4 text-center text-primary">Trip History</h2>
+            <div className="row justify-content-center">
+              <div className="col-md-8">
+                <h3 className="mb-3 text-center text-primary">Ongoing Trips</h3>
+                <ul className="list-unstyled clickable-trips">
+                  <li className="mb-2">Trip 1</li>
+                  <li className="mb-2">Trip 2</li>
+                </ul>
+              </div>
+              <div className="col-md-8">
+                <h3 className="mb-3 text-center text-primary">Upcoming Trips</h3>
+                <ul className="list-unstyled clickable-trips">
+                  <li className="mb-2">Trip 3</li>
+                  <li className="mb-2">Trip 4</li>
+                </ul>
+              </div>
+              <div className="col-md-8">
+                <h3 className="mb-3 text-center text-primary">Previous Trips</h3>
+                <ul className="list-unstyled clickable-trips">
+                  <li className="mb-2">Trip 5</li>
+                  <li className="mb-2">Trip 6</li>
+                </ul>
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default ProfileSettings;
+export default UserProfile;

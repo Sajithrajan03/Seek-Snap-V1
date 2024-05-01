@@ -1,0 +1,95 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+   /* background-color: #f8f9fa; /* Light gray background */ 
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items to the start */
+    min-height: 100vh;
+}
+
+.user-profile-card,
+.trip-history-card {
+    background-color: #0047AB; /* Blue ombre */
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+    width: 600px;
+    margin: 30px auto; /* Center horizontally with top and bottom margin */
+    overflow-y: auto;
+}
+
+.user-profile-card h2,
+.trip-history-card h2 {
+    color: #ffffff; /* White text */
+    margin-bottom: 20px;
+}
+
+.user-profile-card .form-label,
+.trip-history-card .form-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #ffffff; /* White text */
+}
+
+.user-profile-card input[type="text"],
+.user-profile-card input[type="email"],
+.user-profile-card input[type="tel"],
+.user-profile-card select,
+.trip-history-card input[type="text"],
+.trip-history-card input[type="email"],
+.trip-history-card input[type="tel"],
+.trip-history-card select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background-color: #ffffff; /* White background */
+}
+
+.user-profile-card input[type="text"]:focus,
+.user-profile-card input[type="email"]:focus,
+.user-profile-card input[type="tel"]:focus,
+.user-profile-card select:focus,
+.trip-history-card input[type="text"]:focus,
+.trip-history-card input[type="email"]:focus,
+.trip-history-card input[type="tel"]:focus,
+.trip-history-card select:focus {
+    border-color: #ffffff; /* White border color */
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+}
+
+.user-profile-card .btn-primary,
+.user-profile-card .btn-secondary,
+.trip-history-card .btn-primary,
+.trip-history-card .btn-secondary {
+    margin-top: 20px;
+}
+
+.trip-history-card {
+    margin-top: 50px;
+}
+
+.trip-history-card ul {
+    padding-left: 0;
+}
+
+.trip-history-card li {
+    list-style: none;
+    color: #ffffff; /* White text */
+    cursor: pointer; /* Added */
+}
+
+.trip-history-card li:hover {
+    color: #ffcc00; /* Yellow text on hover */
+}
+.user-profile-card .gender-icon {
+    font-size: 2em; /* Adjust the size as needed */
+}
