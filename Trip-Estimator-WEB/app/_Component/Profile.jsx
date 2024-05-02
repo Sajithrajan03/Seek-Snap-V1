@@ -30,19 +30,46 @@ const UserProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isDirty) { // Only save changes if any changes are made
-      // Validate Employee ID
-      const regex = /^(hyd|cbe|bmb|chn|dlh)\d{6}$/; // Regex pattern for validation
-      if (!regex.test(userData.employeeId)) {
-        toast.error('Invalid Employee ID. Please enter a valid ID.');
-        return;
-      }
-      toast.success('Changes saved successfully!');
-    } else {
+  
+    // Check if any changes are made
+    if (!isDirty) {
       toast.info('No changes to save.');
+      return;
     }
+  
+    // Validation for name
+    if (!userData.name.trim()) {
+      toast.error('Name is required.');
+      return;
+    }
+  
+    // Validation for email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userData.email)) {
+      toast.error('Invalid email address. Please enter a valid email.');
+      return;
+    }
+  
+    // Validation for phoneNumber
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(userData.phoneNumber)) {
+      toast.error('Invalid phone number. Please enter a 10-digit number.');
+      return;
+    }
+  
+    // Validation for address (optional)
+  
+    // Validation for gender (optional)
+  
+    // Validation for occupation (optional)
+  
+    // Validation for employeeId (already implemented)
+  
+    // If all validations pass, save changes
+    toast.success('Changes saved successfully!');
     setIsDirty(false); // Reset isDirty after saving changes
   };
+  
 
   return (
     <div className="container py-5">

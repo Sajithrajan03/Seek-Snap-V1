@@ -100,6 +100,15 @@ export default function Register() {
     setPasswordStrength(strength);
   };
 
+  // Function to validate email addresses
+const validateEmail = (email) => {
+  // Regular expression for validating email addresses
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // Test the email against the regular expression
+  return emailRegex.test(email);
+};
+
+
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
